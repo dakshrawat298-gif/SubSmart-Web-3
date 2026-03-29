@@ -1,3 +1,7 @@
+STRICT INSTRUCTIONS FOR AI AGENT:
+You must completely overwrite the `dashboard.html` file with the exact HTML code provided below. 
+Do NOT change a single word of this code. Do NOT add any extra explanations, greetings, or markdown outside the code. Just update the file directly.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
