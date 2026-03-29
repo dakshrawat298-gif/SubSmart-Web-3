@@ -1,3 +1,5 @@
+Act as a strict code assistant. Replace the entire content of 'transactions.html' with the code provided below. STRICT COMMAND: Do not change a single word from your side. Do not add any explanations or comments outside the code. Just update the file exactly as provided.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
