@@ -84,7 +84,7 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
+
         <div class="glass-card rounded-2xl p-7">
           <h2 class="text-lg font-bold text-gray-900 mb-5">Create New Plan</h2>
           <div class="space-y-4">
@@ -129,7 +129,7 @@
     const createPlanBtn = document.getElementById('createPlanBtn');
     const terminalBody = document.getElementById('terminalBody');
     const planAmountInput = document.getElementById('planAmount');
-    
+
     let userAddress = null;
     let planCount = 0;
 
@@ -147,14 +147,14 @@
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
           userAddress = accounts[0];
           const truncated = userAddress.substring(0, 6) + "..." + userAddress.substring(userAddress.length - 4);
-          
+
           walletAddressText.innerText = truncated;
           connectBtn.classList.replace('bg-gray-900', 'bg-green-600');
           warningAlert.style.display = 'none';
-          
+
           createPlanBtn.disabled = false;
           createPlanBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-          
+
           addLog(`Wallet connected: ${truncated}`, "text-white font-bold");
         } catch (error) {
           addLog("Connection rejected by user.", "text-red-400");
@@ -177,20 +177,21 @@
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        
+
+        // Asli Web3 Call jo popup trigger karegi
         const tx = await signer.sendTransaction({
-          to: userAddress, 
+          to: userAddress, // sending to self just for safe demo popup
           value: ethers.utils.parseEther("0.0")
         });
 
         addLog(`Tx Sent! Hash: ${tx.hash.substring(0,10)}...`, "text-gray-500");
         createPlanBtn.innerText = "Processing on Chain...";
-        
+
         const receipt = await tx.wait();
-        
+
         planCount++;
         document.getElementById('activePlansCount').innerText = planCount;
-        
+
         addLog(`Success! Plan deployed in block ${receipt.blockNumber}.`, "text-green-500 font-bold");
         createPlanBtn.innerText = "Deploy Smart Contract Plan";
         createPlanBtn.disabled = false;
