@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — SubSmart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background-color: #f8fafc; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    }
+    .step-active { border-color: #2563eb; background-color: #eff6ff; }
+    .step-inactive { border-color: #e2e8f0; background-color: #ffffff; opacity: 0.6; }
+    .step-done { border-color: #22c55e; background-color: #f0fdf4; }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+  <main class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <span class="text-2xl font-black tracking-tight text-blue-600">SubSmart.</span>
+      <p class="text-sm text-gray-500 mt-2 font-medium">Secure Web3 Checkout</p>
+    </div>
+
+    <div class="glass-card rounded-3xl p-6 sm:p-8">
+      
+      <div class="flex items-center justify-between border-b border-gray-100 pb-6 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg">
+            C
+          </div>
+          <div>
+            <h2 class="text-gray-900 font-bold">Cloud Storage Pro</h2>
+            <p class="text-xs text-gray-500">by MetaDAO</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="text-2xl font-black text-gray-900">25 <span class="text-sm font-bold text-gray-500">USDC</span></p>
+          <p class="text-xs text-gray-400 font-medium">per month</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 mb-8 relative">
+        <div class="absolute left-5 top-8 bottom-8 w-0.5 bg-gray-200 z-0"></div>
+
+        <div id="step1" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-active transition-all">
+          <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold shadow-sm" id="indicator1">1</div>
+          <div>
+            <p class="text-sm font-bold text-gray-900">Connect Wallet</p>
+            <p class="text-xs text-gray-500">Polygon Network</p>
+          </div>
+        </div>
+
+        <div id="step2" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-inactive transition-all">
+          <div class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold" id="indicator2">2</div>
+          <div>
+            <p class="text-sm font-bold text-gray-900">Approve USDC</p>
+            <p class="text-xs text-gray-500">Allow smart contract access</p>
+          </div>
+        </div>
+
+        <div id="step3" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-inactive transition-all">
+          <div class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold" id="indicator3">3</div>
+          <div>
+            <p class="text-sm font-bold text-gray-900">Subscribe</p>
+            <p class="text-xs text-gray-500">Sign recurring agreement</p>
+          </div>
+        </div>
+      </div>
+
+      <button id="actionBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-500/30 flex justify-center items-center gap-2">
+        Connect MetaMask
+      </button>
+
+      <div class="mt-6 flex items-center justify-center gap-2 text-xs text-gray-400 font-medium">
+        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+        Secured by SubSmart Protocol
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const actionBtn = document.getElementById('actionBtn');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const ind1 = document.getElementById('indicator1');
+    const ind2 = document.getElementById('indicator2');
+    const ind3 = document.getElementById('indicator3');
+
+    let currentStage = 0; // 0: Connect, 1: Approve, 2: Subscribe, 3: Done
+
+    actionBtn.addEventListener('click', async () => {
+      // Stage 0 -> 1: Connect Wallet
+      if (currentStage === 0) {
+        actionBtn.innerHTML = `<span class="animate-pulse">Connecting...</span>`;
+        actionBtn.disabled = true;
+        
+        // Simulate Web3 Connection Delay
+        setTimeout(() => {
+          // Update UI for Step 1 Done
+          step1.classList.replace('step-active', 'step-done');
+          ind1.innerHTML = '✓';
+          ind1.classList.replace('bg-blue-600', 'bg-green-500');
+          
+          // Update UI for Step 2 Active
+          step2.classList.replace('step-inactive', 'step-active');
+          ind2.classList.replace('bg-gray-200', 'bg-blue-600');
+          ind2.classList.replace('text-gray-500', 'text-white');
+
+          actionBtn.innerText = "Approve 25 USDC";
+          actionBtn.classList.replace('bg-blue-600', 'bg-gray-900');
+          actionBtn.classList.replace('hover:bg-blue-700', 'hover:bg-black');
+          actionBtn.classList.replace('shadow-blue-500/30', 'shadow-gray-900/30');
+          actionBtn.disabled = false;
+          currentStage = 1;
+        }, 1500);
+      }
+      
+      // Stage 1 -> 2: Approve USDC
+      else if (currentStage === 1) {
+        actionBtn.innerHTML = `<span class="animate-pulse">Awaiting Approval...</span>`;
+        actionBtn.disabled = true;
+
+        setTimeout(() => {
+          step2.classList.replace('step-active', 'step-done');
+          ind2.innerHTML = '✓';
+          ind2.classList.replace('bg-blue-600', 'bg-green-500');
+          
+          step3.classList.replace('step-inactive', 'step-active');
+          ind3.classList.replace('bg-gray-200', 'bg-blue-600');
+          ind3.classList.replace('text-gray-500', 'text-white');
+
+          actionBtn.innerText = "Confirm Subscription";
+          actionBtn.classList.replace('bg-gray-900', 'bg-blue-600');
+          actionBtn.classList.replace('hover:bg-black', 'hover:bg-blue-700');
+          actionBtn.classList.replace('shadow-gray-900/30', 'shadow-blue-500/30');
+          actionBtn.disabled = false;
+          currentStage = 2;
+        }, 2000);
+      }
+
+      // Stage 2 -> 3: Subscribe
+      else if (currentStage === 2) {
+        actionBtn.innerHTML = `<span class="animate-pulse">Signing Contract...</span>`;
+        actionBtn.disabled = true;
+
+        setTimeout(() => {
+          step3.classList.replace('step-active', 'step-done');
+          ind3.innerHTML = '✓';
+          ind3.classList.replace('bg-blue-600', 'bg-green-500');
+
+          actionBtn.innerHTML = `Subscription Active ✓`;
+          actionBtn.classList.replace('bg-blue-600', 'bg-green-500');
+          actionBtn.classList.replace('hover:bg-blue-700', 'hover:bg-green-600');
+          actionBtn.classList.replace('shadow-blue-500/30', 'shadow-green-500/30');
+          currentStage = 3;
+        }, 2500);
+      }
+    });
+  </script>
+</body>
+</html>
