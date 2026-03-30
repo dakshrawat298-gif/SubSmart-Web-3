@@ -1,3 +1,9 @@
+Replace the ENTIRE contents of my `dashboard.html` file with the exact code provided below. 
+
+⚠️ STRICT RULES ⚠️:
+1. This is the FULL AND COMPLETE code. Do not add or remove anything.
+2. Just copy it EXACTLY AS IT IS and overwrite the existing `dashboard.html` file completely.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
