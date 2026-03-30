@@ -1,3 +1,12 @@
+Replace the ENTIRE contents of my `dashboard.html` file with the exact code provided below. This adds the live blinking cursor to the terminal.
+
+⚠️ STRICT AND FINAL WARNING ⚠️:
+1. DO NOT change a single word, letter, or character of the code I am providing.
+2. DO NOT use your own brain to add, remove, or optimize anything. No extra logic.
+3. Just copy my code EXACTLY AS IT IS and overwrite the existing `dashboard.html` file completely. Ensure the code is NOT truncated.
+
+Here is the exact code to paste into `dashboard.html`:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
