@@ -299,7 +299,6 @@
       lastDeployedAmount = parseFloat(planAmountInput.value).toFixed(2);
       lastDeployedCycle = planCycleInput.value;
 
-      // POWER FIX: Data is saved to browser memory for checkout.html to use!
       localStorage.setItem('subsmart_planName', lastDeployedPlanName);
       localStorage.setItem('subsmart_planPrice', lastDeployedAmount);
 
@@ -346,19 +345,15 @@
       }, 1000);
     });
 
-    // POWER FIX: Bulletproof Copy Link for Mobile Browsers
+    // ULTIMATE BULLETPROOF COPY LINK LOGIC
     copyLinkBtn.addEventListener('click', () => {
       let formattedName = lastDeployedPlanName.trim().toLowerCase().replace(/[^a-z0-9]/g, '-');
       if(!formattedName) formattedName = "plan";
       let fakeUrl = `subsmart.app/pay/${formattedName}`;
 
-      // Generate actual URL to checkout.html
-      let currentUrl = window.location.href.split('?')[0].split('#')[0];
-      let realUrlToOpen = currentUrl.includes('dashboard.html')
-          ? currentUrl.replace('dashboard.html', 'checkout.html')
-          : (currentUrl.endsWith('/') ? currentUrl + 'checkout.html' : currentUrl + '/checkout.html');
+      // THE MAGIC FIX: Using Capital 'C' because your GitHub file is named Checkout.html
+      let realUrlToOpen = window.location.origin + '/Checkout.html';
 
-      // The Hacker Copy Trick for Trust Wallet
       const textArea = document.createElement("textarea");
       textArea.value = realUrlToOpen;
       textArea.style.position = "fixed";
