@@ -5,100 +5,221 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout — SubSmart</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config = {theme: {extend: {fontFamily: {sans: ['Inter', 'system-ui', 'sans-serif']},},},}</script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; background-color: #f8fafc; }
-    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04); }
-    .step-active { border-color: #2563eb; background-color: #eff6ff; } .step-inactive { border-color: #e2e8f0; background-color: #ffffff; opacity: 0.6; } .step-done { border-color: #22c55e; background-color: #f0fdf4; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    }
+    .step-active { border-color: #2563eb; background-color: #eff6ff; }
+    .step-inactive { border-color: #e2e8f0; background-color: #ffffff; opacity: 0.6; }
+    .step-done { border-color: #22c55e; background-color: #f0fdf4; }
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 relative z-0">
+
   <div id="walletModal" class="hidden fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center transition-opacity">
     <div class="bg-white rounded-3xl p-6 w-[360px] shadow-2xl transform transition-all border border-gray-100">
-      <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-extrabold text-gray-900">Connect Wallet</h3><button id="cancelWalletBtn" class="text-gray-400 hover:text-gray-700 text-xl font-bold">&times;</button></div>
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-extrabold text-gray-900">Connect Wallet</h3>
+        <button id="cancelWalletBtn" class="text-gray-400 hover:text-gray-700 text-xl font-bold">&times;</button>
+      </div>
+
       <div class="flex items-center gap-4 p-4 border-2 border-blue-500 bg-blue-50/50 rounded-2xl mb-6 cursor-pointer transition-colors shadow-sm relative overflow-hidden">
         <div class="absolute -right-4 -top-4 w-16 h-16 bg-blue-100 rounded-full opacity-50"></div>
         <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white relative z-10 shadow-md">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
         </div>
-        <div class="relative z-10"><span class="block font-bold text-blue-900">Trust Wallet</span><span class="block text-xs text-green-600 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Active & Detected</span></div>
+        <div class="relative z-10">
+          <span class="block font-bold text-blue-900">Trust Wallet</span>
+          <span class="block text-xs text-green-600 font-bold flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Active & Detected
+          </span>
+        </div>
       </div>
+
       <button id="confirmWalletBtn" class="w-full py-3.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all">Sign & Connect</button>
     </div>
   </div>
 
   <div id="txModal" class="hidden fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center transition-opacity">
     <div class="bg-white rounded-3xl p-6 w-[360px] shadow-2xl transform transition-all border border-gray-100">
-      <h3 id="txTitle" class="text-lg font-extrabold text-gray-900 text-center mb-2">Signature Request</h3><p class="text-xs text-center text-gray-500 font-medium mb-6">SubSmart Protocol</p>
+      <h3 id="txTitle" class="text-lg font-extrabold text-gray-900 text-center mb-2">Signature Request</h3>
+      <p class="text-xs text-center text-gray-500 font-medium mb-6">SubSmart Protocol</p>
+
       <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6 space-y-3">
-        <div class="flex justify-between text-sm"><span class="text-gray-500 font-medium">Network</span><span class="font-bold text-gray-900 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Polygon</span></div>
-        <div class="flex justify-between text-sm"><span class="text-gray-500 font-medium">Action</span><span id="txAction" class="font-bold text-blue-600">Approve USDC</span></div>
-        <div class="flex justify-between text-sm border-t border-gray-200 pt-3 mt-1"><span class="text-gray-500 font-medium">Est. Gas Fee</span><span id="txGas" class="font-black text-gray-900">0.005 MATIC</span></div>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-500 font-medium">Network</span>
+          <span class="font-bold text-gray-900 flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-purple-500"></span> Polygon
+          </span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-500 font-medium">Action</span>
+          <span id="txAction" class="font-bold text-blue-600">Approve USDC</span>
+        </div>
+        <div class="flex justify-between text-sm border-t border-gray-200 pt-3 mt-1">
+          <span class="text-gray-500 font-medium">Est. Gas Fee</span>
+          <span id="txGas" class="font-black text-gray-900">0.005 MATIC</span>
+        </div>
       </div>
-      <div class="flex gap-3"><button id="cancelTxBtn" class="flex-1 py-3 text-sm font-bold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Reject</button><button id="confirmTxBtn" class="flex-1 py-3 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all">Confirm</button></div>
+
+      <div class="flex gap-3">
+        <button id="cancelTxBtn" class="flex-1 py-3 text-sm font-bold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Reject</button>
+        <button id="confirmTxBtn" class="flex-1 py-3 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all">Confirm</button>
+      </div>
     </div>
   </div>
 
   <main class="w-full max-w-md relative z-0">
-    <div class="text-center mb-8"><span class="text-2xl font-black tracking-tight text-blue-600">SubSmart.</span><p class="text-sm text-gray-500 mt-2 font-medium">Secure Web3 Checkout</p></div>
+    <div class="text-center mb-8">
+      <span class="text-2xl font-black tracking-tight text-blue-600">SubSmart.</span>
+      <p class="text-sm text-gray-500 mt-2 font-medium">Secure Web3 Checkout</p>
+    </div>
+
     <div class="glass-card rounded-3xl p-6 sm:p-8">
+
       <div class="flex items-center justify-between border-b border-gray-100 pb-6 mb-6">
         <div class="flex items-center gap-3">
-          <div id="planInitial" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg uppercase">N</div>
-          <div><h2 id="checkoutPlanName" class="text-gray-900 font-bold underline decoration-blue-500/50 decoration-wavy">Netflix Subscription</h2><p class="text-xs text-gray-500">by SubSmart Merchant</p></div>
+          <div id="checkoutPlanInitial" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg">
+            N
+          </div>
+          <div>
+            <h2 id="checkoutPlanName" class="text-gray-900 font-bold underline decoration-blue-500/50 decoration-wavy">Netflix Subscription</h2>
+            <p class="text-xs text-gray-500">by SubSmart Merchant</p>
+          </div>
         </div>
         <div class="text-right">
-          <p class="text-2xl font-black text-gray-900"><span id="checkoutPrice">12.00</span> <span class="text-sm font-bold text-gray-500">USDC</span></p>
+          <p class="text-2xl font-black text-gray-900"><span id="checkoutPlanPrice">12.00</span> <span class="text-sm font-bold text-gray-500">USDC</span></p>
           <p class="text-xs text-gray-400 font-medium">per month</p>
         </div>
       </div>
 
       <div class="space-y-4 mb-8 relative">
         <div class="absolute left-5 top-8 bottom-8 w-0.5 bg-gray-200 z-0"></div>
-        <div id="step1" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-active transition-all"><div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold shadow-sm" id="indicator1">1</div><div><p class="text-sm font-bold text-gray-900">Connect Wallet</p><p class="text-xs text-gray-500">Polygon Network</p></div></div>
-        <div id="step2" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-inactive transition-all"><div class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold" id="indicator2">2</div><div><p class="text-sm font-bold text-gray-900">Approve USDC</p><p class="text-xs text-gray-500">Allow smart contract access</p></div></div>
-        <div id="step3" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-inactive transition-all"><div class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold" id="indicator3">3</div><div><p class="text-sm font-bold text-gray-900">Subscribe</p><p class="text-xs text-gray-500">Sign recurring agreement</p></div></div>
+
+        <div id="step1" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-active transition-all">
+          <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold shadow-sm" id="indicator1">1</div>
+          <div>
+            <p class="text-sm font-bold text-gray-900">Connect Wallet</p>
+            <p class="text-xs text-gray-500">Polygon Network</p>
+          </div>
+        </div>
+
+        <div id="step2" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-inactive transition-all">
+          <div class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold" id="indicator2">2</div>
+          <div>
+            <p class="text-sm font-bold text-gray-900">Approve USDC</p>
+            <p class="text-xs text-gray-500">Allow smart contract access</p>
+          </div>
+        </div>
+
+        <div id="step3" class="relative z-10 flex items-center gap-4 p-4 rounded-xl border-2 step-inactive transition-all">
+          <div class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs font-bold" id="indicator3">3</div>
+          <div>
+            <p class="text-sm font-bold text-gray-900">Subscribe</p>
+            <p class="text-xs text-gray-500">Sign recurring agreement</p>
+          </div>
+        </div>
       </div>
 
-      <button id="actionBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-500/30 flex justify-center items-center gap-2">Connect Web3 Wallet</button>
-      <div class="mt-6 flex items-center justify-center gap-2 text-xs text-gray-400 font-medium"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>Secured by SubSmart Protocol</div>
+      <button id="actionBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-500/30 flex justify-center items-center gap-2">
+        Connect Web3 Wallet
+      </button>
+
+      <div class="mt-6 flex items-center justify-center gap-2 text-xs text-gray-400 font-medium">
+        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+        Secured by SubSmart Protocol
+      </div>
     </div>
   </main>
 
   <script>
-    // THE MAGIC UPDATE: LOAD FROM LOCAL STORAGE
-    const savedPlanName = localStorage.getItem('subsmart_plan_name');
-    const savedPlanPrice = localStorage.getItem('subsmart_plan_amount');
-    
-    if (savedPlanName) {
-      document.getElementById('checkoutPlanName').innerText = savedPlanName + ' Subscription';
-      document.getElementById('planInitial').innerText = savedPlanName.charAt(0);
-    }
-    let currentDisplayPrice = savedPlanPrice ? savedPlanPrice : "12.00";
-    if (savedPlanPrice) {
-      document.getElementById('checkoutPrice').innerText = currentDisplayPrice;
-    }
+    // Variables to hold dynamic plan details
+    let currentDisplayPrice = "12.00";
+    let currentDisplayName = "Netflix Subscription";
 
-    const actionBtn = document.getElementById('actionBtn'), step1 = document.getElementById('step1'), ind1 = document.getElementById('indicator1'), step2 = document.getElementById('step2'), ind2 = document.getElementById('indicator2'), step3 = document.getElementById('step3'), ind3 = document.getElementById('indicator3'), walletModal = document.getElementById('walletModal'), cancelWalletBtn = document.getElementById('cancelWalletBtn'), confirmWalletBtn = document.getElementById('confirmWalletBtn'), txModal = document.getElementById('txModal'), txTitle = document.getElementById('txTitle'), txAction = document.getElementById('txAction'), txGas = document.getElementById('txGas'), cancelTxBtn = document.getElementById('cancelTxBtn'), confirmTxBtn = document.getElementById('confirmTxBtn');
-    let currentStage = 0;
+    // Try to load from localStorage (if set by dashboard)
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedName = localStorage.getItem('subsmart_planName');
+      const savedPrice = localStorage.getItem('subsmart_planPrice');
+
+      if (savedName) currentDisplayName = savedName;
+      if (savedPrice) currentDisplayPrice = savedPrice;
+
+      // Update UI elements
+      document.getElementById('checkoutPlanName').innerText = currentDisplayName;
+      document.getElementById('checkoutPlanPrice').innerText = currentDisplayPrice;
+      document.getElementById('checkoutPlanInitial').innerText = currentDisplayName.charAt(0).toUpperCase();
+    });
+
+    const actionBtn = document.getElementById('actionBtn');
+    const step1 = document.getElementById('step1'); const ind1 = document.getElementById('indicator1');
+    const step2 = document.getElementById('step2'); const ind2 = document.getElementById('indicator2');
+    const step3 = document.getElementById('step3'); const ind3 = document.getElementById('indicator3');
+
+    // Modals
+    const walletModal = document.getElementById('walletModal');
+    const cancelWalletBtn = document.getElementById('cancelWalletBtn');
+    const confirmWalletBtn = document.getElementById('confirmWalletBtn');
+
+    const txModal = document.getElementById('txModal');
+    const txTitle = document.getElementById('txTitle');
+    const txAction = document.getElementById('txAction');
+    const txGas = document.getElementById('txGas');
+    const cancelTxBtn = document.getElementById('cancelTxBtn');
+    const confirmTxBtn = document.getElementById('confirmTxBtn');
+
+    let currentStage = 0; // 0: Connect, 1: Approve, 2: Subscribe, 3: Done
 
     actionBtn.addEventListener('click', () => {
-      if (currentStage === 0) { walletModal.classList.remove('hidden'); } 
-      else if (currentStage === 1) { txTitle.innerText = "Token Approval"; txAction.innerText = `Approve ${currentDisplayPrice} USDC`; txGas.innerText = "0.005 MATIC"; txModal.classList.remove('hidden'); } 
-      else if (currentStage === 2) { txTitle.innerText = "Smart Contract Call"; txAction.innerText = "SubSmart.subscribe()"; txGas.innerText = "0.012 MATIC"; txModal.classList.remove('hidden'); }
+      if (currentStage === 0) {
+        walletModal.classList.remove('hidden');
+      } else if (currentStage === 1) {
+        txTitle.innerText = "Token Approval";
+        txAction.innerText = `Approve ${currentDisplayPrice} USDC`;
+        txGas.innerText = "0.005 MATIC";
+        txModal.classList.remove('hidden');
+      } else if (currentStage === 2) {
+        txTitle.innerText = "Smart Contract Call";
+        txAction.innerText = "SubSmart.subscribe()";
+        txGas.innerText = "0.012 MATIC";
+        txModal.classList.remove('hidden');
+      }
     });
 
     cancelWalletBtn.addEventListener('click', () => walletModal.classList.add('hidden'));
-    
+
     confirmWalletBtn.addEventListener('click', () => {
       confirmWalletBtn.innerText = "Connecting...";
       setTimeout(() => {
-        walletModal.classList.add('hidden'); confirmWalletBtn.innerText = "Sign & Connect";
-        step1.classList.replace('step-active', 'step-done'); ind1.innerHTML = '✓'; ind1.classList.replace('bg-blue-600', 'bg-green-500');
-        step2.classList.replace('step-inactive', 'step-active'); ind2.classList.replace('bg-gray-200', 'bg-blue-600'); ind2.classList.replace('text-gray-500', 'text-white');
+        walletModal.classList.add('hidden');
+        confirmWalletBtn.innerText = "Sign & Connect"; // Restored original text
+
+        step1.classList.replace('step-active', 'step-done');
+        ind1.innerHTML = '✓'; ind1.classList.replace('bg-blue-600', 'bg-green-500');
+
+        step2.classList.replace('step-inactive', 'step-active');
+        ind2.classList.replace('bg-gray-200', 'bg-blue-600'); ind2.classList.replace('text-gray-500', 'text-white');
+
         actionBtn.innerText = `Approve ${currentDisplayPrice} USDC`;
-        actionBtn.classList.replace('bg-blue-600', 'bg-gray-900'); actionBtn.classList.replace('hover:bg-blue-700', 'hover:bg-black'); actionBtn.classList.replace('shadow-blue-500/30', 'shadow-gray-900/30');
+        actionBtn.classList.replace('bg-blue-600', 'bg-gray-900');
+        actionBtn.classList.replace('hover:bg-blue-700', 'hover:bg-black');
+        actionBtn.classList.replace('shadow-blue-500/30', 'shadow-gray-900/30');
         currentStage = 1;
       }, 1000);
     });
@@ -107,21 +228,43 @@
 
     confirmTxBtn.addEventListener('click', () => {
       confirmTxBtn.innerText = "Processing...";
+
       setTimeout(() => {
-        txModal.classList.add('hidden'); confirmTxBtn.innerText = "Confirm";
+        txModal.classList.add('hidden');
+        confirmTxBtn.innerText = "Confirm"; // reset
+
         if (currentStage === 1) {
-          actionBtn.innerHTML = `<span class="animate-pulse">Approving on chain...</span>`; actionBtn.disabled = true;
+          actionBtn.innerHTML = `<span class="animate-pulse">Approving on chain...</span>`;
+          actionBtn.disabled = true;
+
           setTimeout(() => {
-            step2.classList.replace('step-active', 'step-done'); ind2.innerHTML = '✓'; ind2.classList.replace('bg-blue-600', 'bg-green-500');
-            step3.classList.replace('step-inactive', 'step-active'); ind3.classList.replace('bg-gray-200', 'bg-blue-600'); ind3.classList.replace('text-gray-500', 'text-white');
-            actionBtn.innerText = "Confirm Subscription"; actionBtn.classList.replace('bg-gray-900', 'bg-blue-600'); actionBtn.classList.replace('hover:bg-black', 'hover:bg-blue-700'); actionBtn.classList.replace('shadow-gray-900/30', 'shadow-blue-500/30'); actionBtn.disabled = false;
+            step2.classList.replace('step-active', 'step-done');
+            ind2.innerHTML = '✓'; ind2.classList.replace('bg-blue-600', 'bg-green-500');
+
+            step3.classList.replace('step-inactive', 'step-active');
+            ind3.classList.replace('bg-gray-200', 'bg-blue-600'); ind3.classList.replace('text-gray-500', 'text-white');
+
+            actionBtn.innerText = "Confirm Subscription";
+            actionBtn.classList.replace('bg-gray-900', 'bg-blue-600');
+            actionBtn.classList.replace('hover:bg-black', 'hover:bg-blue-700');
+            actionBtn.classList.replace('shadow-gray-900/30', 'shadow-blue-500/30');
+            actionBtn.disabled = false;
             currentStage = 2;
           }, 1500);
+
         } else if (currentStage === 2) {
-          actionBtn.innerHTML = `<span class="animate-pulse">Signing Contract...</span>`; actionBtn.disabled = true;
+          actionBtn.innerHTML = `<span class="animate-pulse">Signing Contract...</span>`;
+          actionBtn.disabled = true;
+
           setTimeout(() => {
-            step3.classList.replace('step-active', 'step-done'); ind3.innerHTML = '✓'; ind3.classList.replace('bg-blue-600', 'bg-green-500');
-            actionBtn.innerHTML = `Subscription Active ✓`; actionBtn.classList.replace('bg-blue-600', 'bg-green-500'); actionBtn.classList.replace('hover:bg-blue-700', 'hover:bg-green-600'); actionBtn.classList.replace('shadow-blue-500/30', 'shadow-green-500/30'); currentStage = 3;
+            step3.classList.replace('step-active', 'step-done');
+            ind3.innerHTML = '✓'; ind3.classList.replace('bg-blue-600', 'bg-green-500');
+
+            actionBtn.innerHTML = `Subscription Active ✓`;
+            actionBtn.classList.replace('bg-blue-600', 'bg-green-500');
+            actionBtn.classList.replace('hover:bg-blue-700', 'hover:bg-green-600');
+            actionBtn.classList.replace('shadow-blue-500/30', 'shadow-green-500/30');
+            currentStage = 3;
           }, 2000);
         }
       }, 800);
