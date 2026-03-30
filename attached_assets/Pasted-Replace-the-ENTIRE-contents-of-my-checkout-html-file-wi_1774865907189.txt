@@ -1,3 +1,9 @@
+Replace the ENTIRE contents of my `checkout.html` file with the exact code provided below. This adds localStorage fetching so the page dynamically updates with the plan created in dashboard.
+
+⚠️ STRICT AND FINAL WARNING ⚠️:
+1. DO NOT change a single word. Do not truncate.
+2. Just overwrite `checkout.html`.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,12 +126,4 @@
         } else if (currentStage === 2) {
           actionBtn.innerHTML = `<span class="animate-pulse">Signing Contract...</span>`; actionBtn.disabled = true;
           setTimeout(() => {
-            step3.classList.replace('step-active', 'step-done'); ind3.innerHTML = '✓'; ind3.classList.replace('bg-blue-600', 'bg-green-500');
-            actionBtn.innerHTML = `Subscription Active ✓`; actionBtn.classList.replace('bg-blue-600', 'bg-green-500'); actionBtn.classList.replace('hover:bg-blue-700', 'hover:bg-green-600'); actionBtn.classList.replace('shadow-blue-500/30', 'shadow-green-500/30'); currentStage = 3;
-          }, 2000);
-        }
-      }, 800);
-    });
-  </script>
-</body>
-</html>
+            step3.classList.replace('step-active', 'step-done'); ind3.innerHTML = '✓';
