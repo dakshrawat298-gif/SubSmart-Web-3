@@ -25,8 +25,20 @@ Simple, transparent pricing. We charge a flat **0.5% protocol fee** only on succ
 ## 🧠 The Founder's Story
 I am **Daksh Rawat**, a 19-year-old BBA student with zero traditional coding background. I built the entire SubSmart Smart Contract and Frontend MVP completely on an iPhone using AI, without even opening a laptop. I am an execution-focused visionary on a mission to bridge the gap between traditional SaaS billing convenience and true Web3 ownership. 
 
-## 🤝 Next Steps (Looking for a CTO / Gitcoin Grants)
-We are currently raising $10,000 via Grants/Pre-seed to hire a hardcore Web3 Technical Co-Founder (CTO) to conduct security audits and transition this AI-generated code into a secure, production-ready Mainnet deployment. 
+## 🤝 Next Steps (The Road to Mainnet)
+SubSmart is currently in the active fundraising phase. We are participating in global Web3 Hackathons and applying for ecosystem grants to raise a $10,000 Pre-Seed/Micro-round. 
+
+**Where the funds will go:**
+- 🛡️ **40%:** Tier-1 Smart Contract Audits (Security is our top priority)
+- ⚖️ **30%:** Legal entity setup & Polygon Mainnet deployment
+- 🚀 **30%:** Go-to-Market (Acquiring our first 10 paying Web3 merchants)
+
+We are always looking to connect with Web3 operators, angel investors, and ecosystem builders who align with our vision of decentralized subscriptions.
+
+**Links:**
+- [Linktree & Live Video Demos](https://linktr.ee/SubSmartProtocol)
+- [Follow the Journey on X (Twitter)](https://twitter.com/DakshRa65292147)
+
 
 **Links:**
 - [Linktree & Demos](https://linktr.ee/SubSmartProtocol)
