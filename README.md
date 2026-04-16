@@ -42,9 +42,10 @@ sequenceDiagram
 
 ## 🔗 Deployed Contracts (Polygon Testnet)
 *Currently in active testing phase.*
- * **SubSmart Factory Contract:** [PASTE_YOUR_CONTRACT_ADDRESS_HERE]
- * **USDC Test Token Address:** [PASTE_USDC_TESTNET_ADDRESS_HERE]
-*(Note: Replace the brackets above with your actual contract addresses when deploying)*
+
+- **SubSmart Factory Contract:** `Deployed internally on local testnet. Public Polygon address updating shortly.`
+- **USDC Test Token:** `0x41e94eb019c0762f9bfcf9fb1e58725bfb0e7582` (Standard Polygon Testnet)
+
 
 ## 💻 Developer Setup (Run Locally)
 Want to check out the frontend code or run it locally?
